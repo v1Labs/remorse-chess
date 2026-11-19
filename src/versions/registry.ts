@@ -51,6 +51,12 @@ export const VERSIONS: VersionInfo[] = [
     date: "2026-11-19",
     summary: "Smaller guilt token without the white edge, and a quicker release animation.",
   },
+  {
+    id: "v7",
+    path: "/v7",
+    date: "2026-11-19",
+    summary: "Cleansing pieces show the guilt token with the rotating dashed ring around it.",
+  },
 ];
 
 export const LATEST = VERSIONS[VERSIONS.length - 1];

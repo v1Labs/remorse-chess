@@ -10,6 +10,7 @@ The tutorial is built in iterations so the review process is visible. Each versi
 | v4 | [`/v4`](http://localhost:3000/v4) | 2026-11-19 | Guilt tokens always behind pieces with a bouncier entrance and larger heart-crack, simple piece fades between positions, and clearer button hover states. |
 | v5 | [`/v5`](http://localhost:3000/v5) | 2026-11-19 | Small solid guilt token in front of the piece, with a coin-flip to sparkles when guilt is lifted. |
 | v6 | [`/v6`](http://localhost:3000/v6) | 2026-11-19 | Smaller guilt token without the white edge, and a quicker release animation. |
+| v7 | [`/v7`](http://localhost:3000/v7) | 2026-11-19 | Cleansing pieces show the guilt token with the rotating dashed ring around it. |
 
 ## How versioning works
 
@@ -168,3 +169,13 @@ Built from the original brief. See the README for the rules as implemented, the 
 
 - The token is 32% of a square, down from 40%, still in the top-right corner. The white edge is removed; a soft shadow remains.
 - The release flip runs in 750 ms, down from 1150 ms, and starts 200 ms after the move instead of 300 ms. Its shape is unchanged: edge-on swap at 20%, forward-facing at 70%, faded out by 100%.
+
+### v7
+
+**Requested:** while a piece is cleansing, show the guilt token with the rotating dashed circle around it.
+
+**Shipped:**
+
+- Pending (cleansing) pieces now show the full guilt token. The rotating dashed amber-to-accent ring sits just outside it, with a small gap. Previously the ring replaced the token.
+- The ring extends slightly past the token, so on the h-file or 8th rank its outer edge can be clipped by the board edge.
+- The legend's "cleansing soon" swatch shows a small token inside the ring to match.
