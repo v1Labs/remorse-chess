@@ -7,6 +7,7 @@ The tutorial is built in iterations so the review process is visible. Each versi
 | v1 | [`/v1`](http://localhost:3000/v1) | 2026-11-19 | First build from the brief: 9 steps, scripted board demos synced to typed narration, interactive tasks, and free play vs CPU or a second player. |
 | v2 | [`/v2`](http://localhost:3000/v2) | 2026-11-19 | Outfit/Inter typography, red heart-crack guilt tokens, new logo, tighter copy and slower typing, and guilty pieces cleansed by moving next to a bishop. |
 | v3 | [`/v3`](http://localhost:3000/v3) | 2026-11-19 | Unified #c92552 accent, outlined guilt tokens with a centered heart-crack, cascading board transitions, and drag-and-drop moves. |
+| v4 | [`/v4`](http://localhost:3000/v4) | 2026-11-19 | Guilt tokens always behind pieces with a bouncier entrance and larger heart-crack, simple piece fades between positions, and clearer button hover states. |
 
 ## How versioning works
 
@@ -106,3 +107,31 @@ Built from the original brief. See the README for the rules as implemented, the 
    - **Unchanged:** click-to-move and keyboard input work as before.
    - **Touch:** scrolling is disabled only on squares holding the side-to-move's pieces, so the page still scrolls from other squares.
    - _Not yet tested:_ touch devices, and promotion by drag.
+
+### v4
+
+**Requested:**
+
+1. **Guilt marker.**
+   - Never layer it in front of a piece.
+   - Animate it in from 0% to 100% scale with a subtle bounce.
+   - Give it a thicker stroke and a fill of `#c92552` at 10% opacity.
+   - The heart-crack is too hidden: make it larger relative to the marker so it peeks out.
+2. **Board transitions.** The slide-off and drop-in feel broken. Keep the board fixed and simply fade pieces out and in. Make sure pieces are properly cleared between steps: pieces have been seen persisting from one step into the next.
+3. **Buttons.** Every button should change the cursor and have a hover state. The right-column buttons have hover states but keep the default cursor. Table-of-contents items should get a slightly darker background on hover.
+
+**Shipped:**
+
+1. **Guilt marker.**
+   - Tokens now render in their own layer underneath every piece. They follow the same slide, nudge and fade as their piece, so a token can never be drawn over a piece, even while pieces cross during a move.
+   - The marker scales in from 0 to 100% with a subtle bounce.
+   - Thicker `#c92552` outline (about 0.24em, at least 2.5px) and a fill of `#c92552` at 10% opacity.
+   - The heart-crack is now 84% of the disc and centered, so its lobes peek out around the piece.
+   - _To review:_ at small sizes the outline plus heart can read a little like a target.
+2. **Board transitions.**
+   - The slide-off and cascade are gone. On a position change, old pieces fade out (200 ms) and new ones fade in (260 ms, after 180 ms). The board itself never fades.
+   - **Persisting pieces:** I couldn't reproduce this in a production build, even with rapid step-jumping (scripted checks found no stray pieces after things settled). The likely cause is that, in v3, outgoing pieces were only hidden by a CSS animation and stayed in the DOM until the next position change. If that animation didn't run (for example on the dev server, which had served stale CSS), they stayed visible. Outgoing pieces are now removed from the DOM on a timer, whether or not the animation runs.
+3. **Buttons.**
+   - Every enabled button gets the pointer cursor, through a base style in the v4 stylesheet (Tailwind v4 resets buttons to the default cursor); disabled buttons show `not-allowed`.
+   - Table-of-contents items get a subtle darker background on hover.
+   - The mobile menu button gained a hover state.

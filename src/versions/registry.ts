@@ -31,6 +31,13 @@ export const VERSIONS: VersionInfo[] = [
     summary:
       "Unified #c92552 accent, outlined guilt tokens with a centered heart-crack, cascading board transitions, and drag-and-drop moves.",
   },
+  {
+    id: "v4",
+    path: "/v4",
+    date: "2026-11-19",
+    summary:
+      "Guilt tokens always behind pieces with a bouncier entrance and larger heart-crack, simple piece fades between positions, and clearer button hover states.",
+  },
 ];
 
 export const LATEST = VERSIONS[VERSIONS.length - 1];
