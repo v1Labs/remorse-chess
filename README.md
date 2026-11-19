@@ -1,43 +1,19 @@
-# Frontend Take-Home: Teach Me
+# Remorse Chess: an interactive tutorial
 
-Build a small interactive tutorial that teaches us something you know well. Choose a topic you have unique or extensive knowledge of. It can be professional, personal, serious, or fun.
+An interactive tutorial that teaches **Remorse Chess**, a chess variant where capturing a piece makes the capturer guilt-ridden and unable to capture again until a bishop absolves it.
 
-For example, if you’re an experienced horseback rider, you might teach the steps involved in approaching a jump. If you’re a chef, you might teach someone how to chop an onion. Choose something that lets you demonstrate how you think about teaching and interaction, rather than simply displaying an article.
+The tutorial has 9 steps. Each step plays a scripted demo on a live board while the lesson text types out alongside it. Most steps then hand the board to the learner for a short task with feedback. The last step is a full game against a simple CPU or a second player on the same screen.
 
-## Time Limit
+## Running locally
 
-Spend **no more than 4 hours total**, including planning, building, and documenting your work. You don’t need to use all four hours. We’d rather see a focused, polished experience than a broad, unfinished one.
-
-## Requirements
-
-Your tutorial should:
-
-- Guide a learner through a sequence of steps or concepts.
-- Include at least one meaningful interaction beyond navigating between steps. For example, a learner might make a choice, practice a skill, answer a question, or receive feedback based on an action.
-- Make it clear where the learner is and what to do next.
-- Work well on a recent desktop browser and a smaller screen.
-- Be either hosted at a publicly accessible URL **or** straightforward to run locally with documented setup instructions.
-
-A backend, database, authentication, and production infrastructure are **not required**. It’s fine to use mock or local data.
-
-## Starter Project
-
-The provided starter is a Next.js app using TypeScript, App Router, Tailwind CSS, and ESLint. You may add libraries or adapt the starter as needed.
-
-### Local Development
-
-Use Node.js 22 LTS or newer. From the `teach-me-candidate` directory, run:
+Requires Node.js 22 LTS or newer.
 
 ```bash
 npm ci
-npm run dev
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000). You can start editing `src/app/page.tsx`; the shared layout and styles are in `src/app/layout.tsx` and `src/app/globals.css`.
-
-No environment variables are required for the starter. Its `next/font/google` configuration for Geist requires network access during the build.
-
-### Checks and Production Build
+Checks and production build:
 
 ```bash
 npm run lint
@@ -45,27 +21,65 @@ npm run build
 npm start
 ```
 
-### Optional Deployment to Vercel
+Jump straight to a step with its URL hash, e.g. `/#absolution` or `/#play`.
 
-1. Import your Git repository into [Vercel](https://vercel.com/new).
-2. Set the **Root Directory** to `./`.
-3. Use the automatically detected **Next.js** framework preset and default build settings.
-4. Deploy.
+## Versions
 
-Alternatively, run `npx vercel` from the starter directory and follow the prompts to create a preview deployment. Use `npx vercel --prod` for production. Hosting is optional if your app is easy to run locally.
+The tutorial is developed in iterations. `/` always serves the latest version, and each version stays available at its own route (`/v1`, `/v2`, …). See [VERSIONS.md](VERSIONS.md) for the change log and the release process.
 
-## AI and Other Tools
+## The rules as implemented
 
-You may use AI tools, documentation, and third-party libraries. Briefly tell us what you used and how. Be prepared to explain your implementation and the decisions you made.
+Remorse Chess uses all standard chess rules, plus:
 
-## What to Submit
+- **Guilt.** A piece that captures becomes guilt-ridden (😢 token). It can still move, block and be captured, but cannot capture. En passant counts as a capture.
+- **No check from guilty pieces.** A guilty piece can't capture the king, so it doesn't give check. The exception is the capture itself: if a capturing move gives check (or mate), the opponent must answer it on their next move.
+- **Absolution.** A bishop that *moves* to a square adjacent to guilty friendly pieces absolves all of them. A bishop arriving by promotion counts too.
+- **Self-cleanse.** A bishop that captures becomes guilty and is cleansed at the end of its owner's next move.
+- **Proximity.** A non-bishop that captures on a square already adjacent to a friendly bishop is cleansed at the end of its owner's next move, if it is still adjacent to that bishop. Otherwise it stays guilty.
+- **No bishops.** With no bishops, guilt is permanent until a pawn promotes to a bishop.
+- Deterministic variant: no dice.
 
-Please provide:
+## How it's built (v1)
 
-1. A link to your source code and, if hosted, the live app.
-2. A short README with setup and run instructions, approximate time spent, and any significant tools or libraries used.
-3. A few notes on the tradeoffs you made, what you would improve with more time, and any known limitations.
+Paths below are relative to `src/versions/v1/`.
 
-## What We’ll Look For
 
-We’ll discuss your work with you. We’re interested in the quality of the learning experience and interaction, thoughtful frontend implementation, usability and accessibility, and how you prioritize and explain tradeoffs within a limited time. We’re not judging the topic you choose or expecting a production-ready application.
+- **Next.js 16 (App Router) + React 19 + Tailwind CSS 4**, from the provided starter. The app is a single client component tree. The step lives in the URL hash (`useSyncExternalStore`), so back/forward and deep links work.
+- **`lib/chess/engine.ts`**: a small chess engine written for this project. I didn't use chess.js because guilt changes core rules such as check detection, king safety and checkmate, and patching those from outside would be fragile. It is verified against standard perft counts (start position to depth 4, Kiwipete, position 3) plus scenario tests for every guilt rule.
+- **`lib/chess/ai.ts`**: the CPU opponent, a 3-ply alpha-beta search. Its evaluation discounts guilty pieces and gives bishops a small bonus for their power to absolve.
+- **`lib/tutorial/steps.ts`**: each step is an `async` script (`say`, `move`, `zone`, `arrow`, `bump`, `task`, …). That keeps the narration and board animation in sync by construction, and makes steps easy to edit.
+- **`useTutorialRunner`**: runs a script with cancellation (jumping steps mid-animation), *Skip animation*, *Replay*, and tasks that pause the script until the learner solves them (or presses *Show me*).
+- **Board**: pieces keep stable IDs, so moves are CSS transitions. Captured pieces fade out underneath the capturing piece.
+
+### Interaction & feedback
+
+- **Pacifism:** try to capture with the guilty pawn. The capture is shown as blocked (✕) and the tutorial explains why.
+- **Absolution:** find the bishop move that absolves a guilty knight. The bishop's reach is highlighted.
+- **Self-cleanse:** make any move and watch the bishop forgive itself.
+- **Proximity:** make a move that keeps the knight beside its bishop. Wrong moves are explained and not played.
+- **No bishops:** promote to a bishop (the promotion picker is part of the lesson).
+- **Try it:** a full game vs CPU or with two players, with move list, undo, rule recap and plain-language notices about guilt events.
+
+### Accessibility
+
+- Narration is typed visually, but screen readers get each paragraph whole through a polite live region.
+- When the learner can move, board squares are buttons with descriptive labels (piece, guilt state, legal or blocked). Arrow keys move between squares (roving tabindex) and Enter selects.
+- `prefers-reduced-motion` skips animations and typing.
+- The mobile flyout has Escape to close and moves focus into the menu.
+
+## Tools used
+
+- **Claude Code (Claude Opus)** as a pair programmer. It asked clarifying questions about ambiguous rules, then wrote the engine, step scripts and UI with me. I reviewed and tested in the browser.
+- Piece images: [Cburnett chess pieces](https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces) from Wikimedia Commons, licensed **CC BY-SA 3.0**.
+- Fonts: Geist and Fraunces via `next/font`.
+
+Approximate time spent: _fill in_.
+
+## Tradeoffs, limitations, next steps
+
+- **Click-to-move only.** No drag-and-drop yet. Click works for mouse, touch and keyboard, so it came first.
+- **CPU strength.** A shallow search is quick and plays plausibly, but it's weak and doesn't plan absolutions on purpose.
+- **Draw rules.** Checkmate, stalemate, the 50-move rule and bare kings are detected. Threefold repetition is not.
+- **Steps 6–8 use small custom positions** instead of continuing the Caro-Kann game, so each rule is shown in isolation.
+- **Progress** (checkmarks in the table of contents) is kept in memory only, not saved across reloads.
+- With more time I would add: drag-and-drop, a "what changed" replay for CPU moves, saved progress, a short quiz before free play, and a dark theme.
