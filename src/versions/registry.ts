@@ -38,6 +38,13 @@ export const VERSIONS: VersionInfo[] = [
     summary:
       "Guilt tokens always behind pieces with a bouncier entrance and larger heart-crack, simple piece fades between positions, and clearer button hover states.",
   },
+  {
+    id: "v5",
+    path: "/v5",
+    date: "2026-11-19",
+    summary:
+      "Small solid guilt token in front of the piece, with a coin-flip to sparkles when guilt is lifted.",
+  },
 ];
 
 export const LATEST = VERSIONS[VERSIONS.length - 1];

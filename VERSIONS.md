@@ -8,6 +8,7 @@ The tutorial is built in iterations so the review process is visible. Each versi
 | v2 | [`/v2`](http://localhost:3000/v2) | 2026-11-19 | Outfit/Inter typography, red heart-crack guilt tokens, new logo, tighter copy and slower typing, and guilty pieces cleansed by moving next to a bishop. |
 | v3 | [`/v3`](http://localhost:3000/v3) | 2026-11-19 | Unified #c92552 accent, outlined guilt tokens with a centered heart-crack, cascading board transitions, and drag-and-drop moves. |
 | v4 | [`/v4`](http://localhost:3000/v4) | 2026-11-19 | Guilt tokens always behind pieces with a bouncier entrance and larger heart-crack, simple piece fades between positions, and clearer button hover states. |
+| v5 | [`/v5`](http://localhost:3000/v5) | 2026-11-19 | Small solid guilt token in front of the piece, with a coin-flip to sparkles when guilt is lifted. |
 
 ## How versioning works
 
@@ -135,3 +136,25 @@ Built from the original brief. See the README for the rules as implemented, the 
    - Every enabled button gets the pointer cursor, through a base style in the v4 stylesheet (Tailwind v4 resets buttons to the default cursor); disabled buttons show `not-allowed`.
    - Table-of-contents items get a subtle darker background on hover.
    - The mobile menu button gained a hover state.
+
+### v5
+
+**Requested:**
+
+1. **Token.** The marker still feels odd behind the pieces. Use a smaller, solid red token with a white heart-crack icon in the top-right foreground, similar in size and placement to v1.
+2. **Removal animation.** When guilt is removed, flip the marker: rotate 90°, swap the icon to Lucide `sparkles`, then rotate another 270° so it ends forward-facing. The color fades and the marker scales up to about 1.3 as it disappears.
+
+**Shipped:**
+
+1. **Token.**
+   - Solid `#c92552` disc with a thin white edge and a white heart-crack, 40% of a square, in the top-right corner. Same size and placement as v1.
+   - The token layer moved back above the pieces.
+   - It still scales in with v4's subtle bounce.
+   - Pending tokens show only the rotating dashed ring. This carries over an uncommitted edit found in v4's `GuiltToken.tsx`, which was left out of the commits.
+2. **Removal animation.**
+   - When a piece's guilt is lifted (absolution or cleansing), its token flips like a coin: 0→90° around the vertical axis, where the heart-crack swaps for Lucide `sparkles`, then on to 360° so it faces forward again.
+   - The red fill fades and the sparkles shift from white to the accent color. The token scales to 1.3 and fades out over the last 30%, so the forward-facing sparkles stay visible before they go.
+   - The animation runs 1.15 s, starting 300 ms after the move so it follows the absolving move.
+   - Releasing tokens are tracked per piece, follow the piece if it moves, and are cleared on a timer.
+   - _Interpretation:_ the request said the z-axis, but a z-axis turn spins the token flat on the board and shows the icon swap. A y-axis (coin) flip hides the swap at 90° as intended.
+   - The ✨ emoji effect for absolution and cleansing was removed in favor of this animation.
