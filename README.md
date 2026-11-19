@@ -99,9 +99,3 @@ Approximate time spent: _fill in_.
 - **Draw rules:** checkmate, stalemate, the 50-move rule and bare kings are detected. Threefold repetition is not.
 - **Progress:** the table-of-contents checkmarks are kept in memory only and reset on reload.
 - **Dev server cache:** Turbopack's persistent dev cache sometimes kept serving a stale build of a newly copied version's stylesheet, even across restarts. `npm run dev:clean` clears it. Production builds aren't affected.
-
-## With more time
-
-- Keep the lesson visible on phones (a compact board or a sticky lesson drawer) and test touch drag on devices.
-- A short quiz before free play, saved progress, and a "what changed" replay for CPU moves.
-- A dark theme.
