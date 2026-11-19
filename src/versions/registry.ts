@@ -57,6 +57,12 @@ export const VERSIONS: VersionInfo[] = [
     date: "2026-11-19",
     summary: "Cleansing pieces show the guilt token with the rotating dashed ring around it.",
   },
+  {
+    id: "v8",
+    path: "/v8",
+    date: "2026-11-19",
+    summary: "Cleansing pieces show a red heart-crack inside the rotating dashed ring, with no red background.",
+  },
 ];
 
 export const LATEST = VERSIONS[VERSIONS.length - 1];
