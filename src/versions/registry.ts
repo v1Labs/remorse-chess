@@ -63,6 +63,12 @@ export const VERSIONS: VersionInfo[] = [
     date: "2026-11-19",
     summary: "Cleansing pieces show a red heart-crack inside the rotating dashed ring, with no red background.",
   },
+  {
+    id: "v9",
+    path: "/v9",
+    date: "2026-11-19",
+    summary: "Back to v7's cleansing marker (solid token inside the ring), with more space between token and ring.",
+  },
 ];
 
 export const LATEST = VERSIONS[VERSIONS.length - 1];

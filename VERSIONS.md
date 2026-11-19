@@ -12,6 +12,7 @@ The tutorial is built in iterations so the review process is visible. Each versi
 | v6 | [`/v6`](http://localhost:3000/v6) | 2026-11-19 | Smaller guilt token without the white edge, and a quicker release animation. |
 | v7 | [`/v7`](http://localhost:3000/v7) | 2026-11-19 | Cleansing pieces show the guilt token with the rotating dashed ring around it. |
 | v8 | [`/v8`](http://localhost:3000/v8) | 2026-11-19 | Cleansing pieces show a red heart-crack inside the rotating dashed ring, with no red background. |
+| v9 | [`/v9`](http://localhost:3000/v9) | 2026-11-19 | Back to v7's cleansing marker (solid token inside the ring), with more space between token and ring. |
 
 ## How versioning works
 
@@ -190,3 +191,13 @@ Built from the original brief. See the README for the rules as implemented, the 
 - Cleansing pieces show the rotating dashed ring with a red (`#c92552`) heart-crack inside it, and no background. Only the ring rotates. The heart pops in with the token's bounce when cleansing starts.
 - When a cleansing piece's guilt clears, the release flip keeps the no-background look: a red heart flips to red sparkles, with no red disc. Pieces absolved straight from the solid-token state, such as by a bishop arriving, still flip from the solid red token.
 - The legend's "cleansing soon" swatch matches.
+
+### v9
+
+**Requested:** revert to v7's guilt-marker treatment, because v8's red heart is hard to see. Increase the space between the marker and the dashed border by about 2px so it's less cramped.
+
+**Shipped:**
+
+- v9 was copied from **v7**, not v8, so cleansing pieces again show the solid red token with a white heart-crack inside the rotating dashed ring. The release flip starts from the solid token, as in v7.
+- The ring is 2px further out on every side (`inset: calc(-18% - 2px)`), so the gap between token and ring grows by about 2px at any board size. Because the ring's thickness is a percentage of its size, it gets marginally thicker too.
+- v8 stays available at `/v8` but is no longer the base for later versions.
