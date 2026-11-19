@@ -9,6 +9,7 @@ The tutorial is built in iterations so the review process is visible. Each versi
 | v3 | [`/v3`](http://localhost:3000/v3) | 2026-11-19 | Unified #c92552 accent, outlined guilt tokens with a centered heart-crack, cascading board transitions, and drag-and-drop moves. |
 | v4 | [`/v4`](http://localhost:3000/v4) | 2026-11-19 | Guilt tokens always behind pieces with a bouncier entrance and larger heart-crack, simple piece fades between positions, and clearer button hover states. |
 | v5 | [`/v5`](http://localhost:3000/v5) | 2026-11-19 | Small solid guilt token in front of the piece, with a coin-flip to sparkles when guilt is lifted. |
+| v6 | [`/v6`](http://localhost:3000/v6) | 2026-11-19 | Smaller guilt token without the white edge, and a quicker release animation. |
 
 ## How versioning works
 
@@ -51,7 +52,7 @@ Example for v2:
 3. **Add the route:** copy `src/app/(v1)` to `src/app/(v2)`, rename the inner `v1/` folder to `v2/`, and point both files at `@/versions/v2/...`. Update the layout's metadata title.
 4. **Register it:** append v2 to `src/versions/registry.ts` and point both exports in `src/versions/latest.ts` at `./v2/...`.
 5. **Make the changes** in `src/versions/v2/` only, styles included.
-6. **Verify:** `npm run lint && npm run build`, then check `/`, `/v2` and every older route at desktop and mobile widths. Older versions should look exactly as before.
+6. **Verify:** restart the dev server with `npm run dev:clean` after creating the new version. Turbopack's persistent dev cache (`.next/dev/cache`) can keep serving a stale build of a copied stylesheet, even across plain restarts. Then run `npm run lint && npm run build` and check `/`, `/v2` and every older route at desktop and mobile widths. Older versions should look exactly as before.
 7. **Record what shipped:** update the table above and fill in the version's section with what changed and any deviations from the request.
 
 ## Change log
@@ -158,3 +159,12 @@ Built from the original brief. See the README for the rules as implemented, the 
    - Releasing tokens are tracked per piece, follow the piece if it moves, and are cleared on a timer.
    - _Interpretation:_ the request said the z-axis, but a z-axis turn spins the token flat on the board and shows the icon swap. A y-axis (coin) flip hides the swap at 90° as intended.
    - The ✨ emoji effect for absolution and cleansing was removed in favor of this animation.
+
+### v6
+
+**Requested:** make the token slightly smaller, remove its white stroke, and speed up the release animation a bit.
+
+**Shipped:**
+
+- The token is 32% of a square, down from 40%, still in the top-right corner. The white edge is removed; a soft shadow remains.
+- The release flip runs in 750 ms, down from 1150 ms, and starts 200 ms after the move instead of 300 ms. Its shape is unchanged: edge-on swap at 20%, forward-facing at 70%, faded out by 100%.

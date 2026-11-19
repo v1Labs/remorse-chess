@@ -45,6 +45,12 @@ export const VERSIONS: VersionInfo[] = [
     summary:
       "Small solid guilt token in front of the piece, with a coin-flip to sparkles when guilt is lifted.",
   },
+  {
+    id: "v6",
+    path: "/v6",
+    date: "2026-11-19",
+    summary: "Smaller guilt token without the white edge, and a quicker release animation.",
+  },
 ];
 
 export const LATEST = VERSIONS[VERSIONS.length - 1];
