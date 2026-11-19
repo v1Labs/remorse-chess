@@ -35,13 +35,13 @@ Remorse Chess uses all standard chess rules, plus:
 - **No check from guilty pieces.** A guilty piece can't capture the king, so it doesn't give check. The exception is the capture itself: if a capturing move gives check (or mate), the opponent must answer it on their next move.
 - **Absolution.** A bishop that *moves* to a square adjacent to guilty friendly pieces absolves all of them. A bishop arriving by promotion counts too.
 - **Self-cleanse.** A bishop that captures becomes guilty and is cleansed at the end of its owner's next move.
-- **Proximity.** A non-bishop that captures on a square already adjacent to a friendly bishop is cleansed at the end of its owner's next move, if it is still adjacent to that bishop. Otherwise it stays guilty.
+- **Proximity (v2).** A guilty piece that ends its owner's move next to a friendly bishop (including by capturing there) is cleansed at the end of its owner's next move, if it is still next to a friendly bishop. If it is separated from every bishop first, it stays guilty. In v1 this applied only to captures made next to a bishop.
 - **No bishops.** With no bishops, guilt is permanent until a pawn promotes to a bishop.
 - Deterministic variant: no dice.
 
-## How it's built (v1)
+## How it's built
 
-Paths below are relative to `src/versions/v1/`.
+Paths below are relative to a version folder, e.g. `src/versions/v2/`.
 
 
 - **Next.js 16 (App Router) + React 19 + Tailwind CSS 4**, from the provided starter. The app is a single client component tree. The step lives in the URL hash (`useSyncExternalStore`), so back/forward and deep links work.
@@ -56,7 +56,7 @@ Paths below are relative to `src/versions/v1/`.
 - **Pacifism:** try to capture with the guilty pawn. The capture is shown as blocked (✕) and the tutorial explains why.
 - **Absolution:** find the bishop move that absolves a guilty knight. The bishop's reach is highlighted.
 - **Self-cleanse:** make any move and watch the bishop forgive itself.
-- **Proximity:** make a move that keeps the knight beside its bishop. Wrong moves are explained and not played.
+- **Proximity:** move a guilty knight next to a bishop and watch it get cleansed a turn later. Wrong moves are explained and not played.
 - **No bishops:** promote to a bishop (the promotion picker is part of the lesson).
 - **Try it:** a full game vs CPU or with two players, with move list, undo, rule recap and plain-language notices about guilt events.
 

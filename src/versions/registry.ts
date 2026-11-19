@@ -17,6 +17,13 @@ export const VERSIONS: VersionInfo[] = [
     summary:
       "First build from the brief: 9 steps, scripted board demos synced to typed narration, interactive tasks, and free play vs CPU or a second player.",
   },
+  {
+    id: "v2",
+    path: "/v2",
+    date: "2026-11-19",
+    summary:
+      "Outfit/Inter typography, red heart-crack guilt tokens, new logo, tighter copy and slower typing, and guilty pieces cleansed by moving next to a bishop.",
+  },
 ];
 
 export const LATEST = VERSIONS[VERSIONS.length - 1];
