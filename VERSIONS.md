@@ -6,6 +6,7 @@ The tutorial is built in iterations so the review process is visible. Each versi
 | ------- | ----- | ---- | ------- |
 | v1 | [`/v1`](http://localhost:3000/v1) | 2026-11-19 | First build from the brief: 9 steps, scripted board demos synced to typed narration, interactive tasks, and free play vs CPU or a second player. |
 | v2 | [`/v2`](http://localhost:3000/v2) | 2026-11-19 | Outfit/Inter typography, red heart-crack guilt tokens, new logo, tighter copy and slower typing, and guilty pieces cleansed by moving next to a bishop. |
+| v3 | [`/v3`](http://localhost:3000/v3) | 2026-11-19 | Unified #c92552 accent, outlined guilt tokens with a centered heart-crack, cascading board transitions, and drag-and-drop moves. |
 
 ## How versioning works
 
@@ -81,3 +82,27 @@ Built from the original brief. See the README for the rules as implemented, the 
 4. **Logo.** Lucide `heart-crack` with uppercase bold Outfit "REMORSE CHESS" (`lucide-react` added).
 5. **Heart-crack on the token.** White icon at the token's top-right, where pieces are narrowest. It animates in with a small "crack" wiggle after the disc appears. At the bottom-right it was hidden by piece bases. The legend and rules recap use a matching swatch.
 6. **Copy and pacing.** Lesson copy is roughly a third shorter. Typing slowed from 14 to 19 ms per character.
+
+### v3
+
+**Requested:**
+
+1. **One red.** Several shades of red clash. Use `#c92552` as the base. It passes contrast checks except WCAG AAA, which is fine for a demo but should be noted.
+2. **Token outline.** Give the token a darker border and lighter fill so it doesn't read as a fuzzy red circle: a `#c92552` stroke and a lighter gradient fill. The heart-crack icon should be about 80% of the circle's radius, centered, and the same color as the stroke.
+3. **Board transitions.** Replace the clunky board fade with this: the board stays put, the old pieces slide off to the left while fading out, and the new pieces drop into place in a quick cascade.
+4. **Drag and drop** for moving pieces. This takes effort to get right, so it may be reverted.
+
+**Shipped:**
+
+1. **One red.** `--accent` is now `#c92552`, with `--accent-strong` (hover) and `--accent-soft` (badge background) mixed from it.
+   - Every other red now uses it, replacing several Tailwind rose shades and hard-coded reds: blocked-capture markers, arrows, check glow, step indicator, Next button, legend, Check badge and token.
+   - Contrast: 5.43:1 on white, 5.34:1 on the panel and 4.87:1 on the page background. This passes WCAG AA (4.5:1) but not AAA (7:1).
+2. **Token.** `#c92552` outline (about 0.14em, at least 1.5px) with a light radial gradient fill mixed from the accent. The heart-crack is centered at 40% of the disc's diameter (80% of its radius), in the stroke color.
+   - _Known issue:_ centered behind the piece, the icon is almost completely hidden by most pieces (verified on a pawn). Candidates for v4: move it back to the edge, draw it on top of the piece, or drop it.
+3. **Board transitions.** The board itself no longer fades. When the position changes, old pieces slide about 1.4 squares left while fading, staggered by file. New pieces then drop in top-left to bottom-right, each fading in from slightly above (220 ms start, 14 ms stagger). Scripted pauses after a position change were lengthened to match.
+4. **Drag and drop.** Pointer events on the board; works with mouse and touch.
+   - **Dragging:** a piece follows the cursor after 6 px of movement, its legal targets show, and the square under the pointer is outlined.
+   - **Dropping:** a legal drop snaps into place with no slide animation. Illegal drops get the same feedback as clicks, such as guilt explanations. Releasing over the piece's own square keeps it selected; releasing off the board cancels.
+   - **Unchanged:** click-to-move and keyboard input work as before.
+   - **Touch:** scrolling is disabled only on squares holding the side-to-move's pieces, so the page still scrolls from other squares.
+   - _Not yet tested:_ touch devices, and promotion by drag.

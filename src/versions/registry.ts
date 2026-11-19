@@ -24,6 +24,13 @@ export const VERSIONS: VersionInfo[] = [
     summary:
       "Outfit/Inter typography, red heart-crack guilt tokens, new logo, tighter copy and slower typing, and guilty pieces cleansed by moving next to a bishop.",
   },
+  {
+    id: "v3",
+    path: "/v3",
+    date: "2026-11-19",
+    summary:
+      "Unified #c92552 accent, outlined guilt tokens with a centered heart-crack, cascading board transitions, and drag-and-drop moves.",
+  },
 ];
 
 export const LATEST = VERSIONS[VERSIONS.length - 1];

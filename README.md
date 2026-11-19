@@ -77,9 +77,9 @@ Approximate time spent: _fill in_.
 
 ## Tradeoffs, limitations, next steps
 
-- **Click-to-move only.** No drag-and-drop yet. Click works for mouse, touch and keyboard, so it came first.
+- **Moving pieces.** v1–v2 are click-to-move only. v3 adds drag and drop, alongside click and keyboard input.
 - **CPU strength.** A shallow search is quick and plays plausibly, but it's weak and doesn't plan absolutions on purpose.
 - **Draw rules.** Checkmate, stalemate, the 50-move rule and bare kings are detected. Threefold repetition is not.
 - **Steps 6–8 use small custom positions** instead of continuing the Caro-Kann game, so each rule is shown in isolation.
 - **Progress** (checkmarks in the table of contents) is kept in memory only, not saved across reloads.
-- With more time I would add: drag-and-drop, a "what changed" replay for CPU moves, saved progress, a short quiz before free play, and a dark theme.
+- With more time I would add: a "what changed" replay for CPU moves, saved progress, a short quiz before free play, and a dark theme.
